@@ -1,0 +1,149 @@
+---
+title: "Hypothesis Testing"
+author: "Manan Choudhary"
+date: "14/10/2021"
+output: word_document
+---
+
+```{r}
+a <- read.csv('Electric Vehicles In India (Responses) - Form Responses project.csv')
+
+View(a)
+
+
+b <- as.factor(a$Gender)
+b
+c <- as.factor(a$Education.level)
+c
+d<- as.factor(a$Occupation.type)
+d
+
+e <- as.factor(a$How.important.is.someone.s.advice.regarding.your.car.choice.)
+e
+i <-  as.factor(a$Rate.your.views.on.electric.vehicles)
+
+
+```
+
+```{r}
+library(dplyr)
+
+library(MASS)
+```
+
+
+
+```{r}
+glimpse(a)
+
+```
+
+
+```{r}
+# Hypothesis test 1 : Is there any association between education level of people and their advice/opinion of people on  choosing their vehicle
+
+z <-  table(a$Education.level,a$How.important.is.someone.s.advice.regarding.your.car.choice.)
+z
+
+
+```
+
+
+
+```{r}
+fisher.test(a$Education.level,a$Rate.your.views.on.electric.vehicles,alternative = 'two.tailed')
+```
+# Since we took alpha=0.05 and the calculated p value comes out as 0.9395 which is much greater than 0.05.
+
+# Hence we can conclude that there is no significant difference between education level of people and their views on electric vehicles.
+
+```{r}
+f <- as.factor(a$How.do.you.think.buying.an.electric.vehicle.will.change.your.image.)
+f
+```
+
+
+
+```{r}
+# Hypothesis Test 2: Is there any association between people who believe their adoption of electric vehicles will impact their image based on their intent to buy an electric vehicle in future
+
+r= table(a$How.do.you.think.buying.an.electric.vehicle.will.change.your.image.,a$What.are.the.chances.your.next.car.will.be.an..electric.vehicle.down.in.the.near.future.)
+
+
+lm <- f
+levels(lm) <- list(NotMuchChange_or_nochange=c('No changes on my image','Not sure'), Positive_impact='Positive impact on my image')
+# Greater image than they have right now
+table(lm,a$What.are.the.chances.your.next.car.will.be.an..electric.vehicle.down.in.the.near.future.)
+
+
+
+```
+
+
+```{r}
+fisher.test(lm,a$What.are.the.chances.your.next.car.will.be.an..electric.vehicle.down.in.the.near.future.)
+```
+# Since p-value(0.002021) is much lesser than 0.05 we reject out nul hypothesis.
+# We can see that there is an association between the people who believe their image will be influenced and their choice for electric vehicle in the near future.
+
+
+
+```{r}
+# Hypothesis Test3: 
+
+re= table(a$Are.you.environmentally.conscious.,a$Rate.your.views.on.electric.vehicles)
+rstatix::wilcox_test(data = a,Rate.your.views.on.electric.vehicles~Are.you.environmentally.conscious.)
+
+# rank biserial correlation
+```
+
+
+
+
+
+# Since p-value is less than 0.05 we see that there is a significant difference in opinion of people on environmentally conciousness and rating of electric vehicles.
+
+
+```{r}
+t= as.factor(a$Do.you.know.anything.about.Electric.Vehicles.)
+t
+```
+
+
+```{r}
+# Hypothesis 4: Is there any association between gender and their knowledge on electric vehicles
+
+q= table(a$Gender,a$Do.you.know.anything.about.Electric.Vehicles.)
+
+
+wa <- t
+levels(wa) <- list(Little_Intermediate_knowldege=c("May be heard of it somewhere","Somewhat familiar"),In_depth_knowledge= "In-depth Knowledge" )
+
+table(a$Gender,wa)
+
+
+fisher.test(a$Gender,wa)
+
+```
+
+# We can see that p value(0.05101) which is greater than 0.05, there is a no significant difference between gender and their knowledge on electric vehicles.
+
+
+```{r}
+# Hypothesis testing 5: Is there any asssociation between occupation of people and their opinion on the cost of electric vehicles?
+
+er= table(a$Occupation.type,a$If.there.is.an.electric.car.with.more.or.less.the.same.functionality.as.a.gasoline.powered.car..how.much.more.are.you.willing.to.pay.for.it.)
+
+tr= as.factor(a$If.there.is.an.electric.car.with.more.or.less.the.same.functionality.as.a.gasoline.powered.car..how.much.more.are.you.willing.to.pay.for.it.)
+
+sa= tr
+levels(sa) <- list(Wont_pay_a_higher_price = c("Not more than 10%" , "Not more than 20%","Wont pay a higher price"), Not_more_than_30_percent= "Not more than 30%" )
+
+table(a$Occupation.type,sa)
+
+fisher.test(a$Occupation.type,sa)
+
+
+```
+
+# Since the p-value(0.1298) is more than 0.05 . We do not reject our null hypothesis, hence there is no association between occupation of people and their opinion on the cost of electric vehicles in India.

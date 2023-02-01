@@ -8,5 +8,5 @@ The overall project involves the follwoing process-
 
 1. Gathering the data using google forms
 2. Exploratory data analysis on the data to know the actual views about people on Electric Vehicles.
-3. Perform statsitical test to validate the results of the hypothesis obtained.
+3. Perform statistical test to validate the results of the hypothesis obtained.
 4. Document the result.
